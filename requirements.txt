@@ -1,5 +1,5 @@
 streamlit>=1.28.0
-langgraph>=0.0.60
+langgraph==0.0.60
 langchain-core>=0.1.0
 google-auth>=2.0.0
 google-auth-oauthlib>=0.8.0
