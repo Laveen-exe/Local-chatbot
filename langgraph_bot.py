@@ -104,7 +104,14 @@ chatbot = graph.compile(checkpointer=checkpointer)
 
 def retrieve_all_threads():
     all_threads = set()
-    for checkpoint in checkpointer.list(None):
-        all_threads.add(checkpoint.config['configurable']['thread_id'])
-
+    try:
+        # Try to list all checkpoints. If API requires a config, use an empty thread_id.
+        for checkpoint in checkpointer.list({"configurable": {"thread_id": ""}}):
+            # Defensive: Only add if thread_id exists in config
+            thread_id = checkpoint.config.get('configurable', {}).get('thread_id')
+            if thread_id:
+                all_threads.add(thread_id)
+    except Exception as e:
+        # If listing fails, return empty list
+        print(f"Error listing threads: {e}")
     return list(all_threads)
